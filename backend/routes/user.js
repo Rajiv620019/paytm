@@ -2,6 +2,7 @@ const express = require("express");
 const zod = require("zod");
 const { User } = require("../db");
 const { JWT_SECRET } = require("../config");
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
@@ -19,6 +20,37 @@ router.post("/signup", async (req, res) => {
       message: "Email already taken / Incorrect inputs",
     });
   }
+
+  const existingUser = await User.findOne({
+    username: req.body.username,
+  });
+
+  if (existingUser) {
+    return res.status(411).json({
+      message: "User Already Exists",
+    });
+  }
+
+  const newUser = await User.create({
+    username: req.body.username,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    password: req.body.password,
+  });
+
+  const userId = newUser._id;
+
+  const token = jwt.sign(
+    {
+      userId,
+    },
+    JWT_SECRET
+  );
+
+  res.json({
+    message: "User created successfully",
+    token: token,
+  });
 });
 
 module.exports = router;
