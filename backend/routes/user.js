@@ -150,15 +150,4 @@ router.get("/bulk", async (req, res) => {
   });
 });
 
-// Get user balance
-router.get("/balance", authMiddelware, async (req, res) => {
-  const account = await Account.findOne({
-    userId: req.userId,
-  });
-
-  res.status(211).json({
-    balance: account.balance,
-  });
-});
-
 module.exports = router;
