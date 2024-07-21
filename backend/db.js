@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const { number } = require("zod");
 
 mongoose.connect(
   "mongodb+srv://admin:Rajat123456@cluster0.aawl5nl.mongodb.net/paytm"
 );
 
+// Users Schema
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -33,8 +35,24 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// Accounts Schema
+const accountsSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User,
+    required: true,
+  },
+
+  balance: {
+    type: Number,
+    required: true,
+  },
+});
+
 const User = mongoose.model("User", userSchema);
+const Account = mongoose.model("Account", accountsSchema);
 
 module.exports = {
   User,
+  Account,
 };
