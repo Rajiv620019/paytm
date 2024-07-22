@@ -8,6 +8,7 @@ import { Signup } from "./pages/Signup";
 function App() {
   return (
     <>
+      <Signup />
       <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<Signup />} />
